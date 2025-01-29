@@ -1,0 +1,7 @@
+[
+  { "title": "Apprendre TypeScript", "isDone": false },
+  { "title": "Faire les courses", "isDone": true },
+  { "title": "Lire un livre", "isDone": false },
+  { "title": "Aller à la salle de sport", "isDone": true },
+  { "title": "Écrire un article de blog", "isDone": false }
+]
