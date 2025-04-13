@@ -38,4 +38,61 @@ app.get("/todos", async (req, res) => {
   }
 });
 
+// Créer un todo
+app.post("/todos", async (req, res) => {
+  try {
+    const { title } = req.body;
+    if (!title) {
+      return res.status(400).json({ message: "Title is required" });
+    }
+
+    const newTodo = new Todo({
+      title,
+      isDone: false,
+    });
+
+    await newTodo.save();
+    res.status(201).json(newTodo);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Inverser l'état (isDone) d'un todo
+app.put("/todos/:id", async (req, res) => {
+  try {
+    const todoId = req.params.id;
+
+    const todo = await Todo.findById(todoId);
+
+    if (!todo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
+    // Inverser la valeur de isDone
+    todo.isDone = !todo.isDone;
+    await todo.save();
+
+    res.json(todo);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Supprimer un todo
+app.delete("/todos/:id", async (req, res) => {
+  try {
+    const todoId = req.params.id;
+    const deletedTodo = await Todo.findByIdAndDelete(todoId);
+
+    if (!deletedTodo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
+    res.json({ message: "Todo deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.listen(process.env.PORT, () => console.log("Server started"));
